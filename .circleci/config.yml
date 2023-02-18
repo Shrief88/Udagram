@@ -8,21 +8,19 @@ orbs:
 jobs:
   build:
     docker:
-      # the base image can run most needed actions with orbs
       - image: "cimg/node:14.15"
     steps:
-      # install node and checkout code
       - node/install:
-          node-version: '14.15'         
+          node-version: "14.15"
       - checkout
       - run:
           name: Install Front-End Dependencies
           command: |
-            npm run frontend:install          
+            npm run frontend:install
       - run:
           name: Install API Dependencies
           command: |
-           npm run backend:install
+            npm run backend:install
       - run:
           name: Front-End Lint
           command: |
@@ -30,28 +28,28 @@ jobs:
       - run:
           name: Front-End Build
           command: |
-            npm run frontend:build      
+            npm run frontend:build
       - run:
           name: API Build
           command: |
             npm run backend:build
-  # deploy step will run only after manual approval
   deploy:
     docker:
       - image: "cimg/base:stable"
-      # more setup needed for aws, node, elastic beanstalk
     steps:
       - node/install:
-          node-version: '14.15' 
+          node-version: "14.15"
       - eb/setup
       - aws-cli/setup
       - checkout
       - run:
-          name: Deploy App
-          # TODO: Install, build, deploy in both apps
+          name: deploy frontend
           command: |
-            echo "# TODO: Install, build, deploy in both apps"
-            
+            npm run frontend:deploy
+      - run:
+          name: deploy backend
+          command: |
+            npm run backend:deploy
 workflows:
   udagram:
     jobs:
