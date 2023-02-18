@@ -12,6 +12,8 @@ jobs:
     steps:
       - node/install:
           node-version: "14.15"
+      - eb/setup
+      - aws-cli/setup    
       - checkout
       - run:
           name: Install Front-End Dependencies
@@ -33,17 +35,6 @@ jobs:
           name: API Build
           command: |
             npm run backend:build
-  deploy:
-    docker:
-      - image: "cimg/base:stable"
-    dependencies:
-      - build  
-    steps:
-      - node/install:
-          node-version: "14.15"
-      - eb/setup
-      - aws-cli/setup
-      - checkout
       - run:
           name: deploy frontend
           command: |
@@ -51,11 +42,28 @@ jobs:
       - run:
           name: deploy backend
           command: |
-            npm run backend:deploy
+            npm run backend:deploy      
+  # deploy:
+  #   docker:
+  #     - image: "cimg/base:stable" 
+  #   steps:
+  #     - node/install:
+  #         node-version: "14.15"
+  #     - eb/setup
+  #     - aws-cli/setup
+  #     - checkout
+  #     - run:
+  #         name: deploy frontend
+  #         command: |
+  #           npm run frontend:deploy
+  #     - run:
+  #         name: deploy backend
+  #         command: |
+  #           npm run backend:deploy
 workflows:
-  udagram:
+  build_and_deploy:
     jobs:
-      - build
-      - deploy:
-          requires:
-            - build
+      - build:
+          filters:
+            branches:
+              only: main
