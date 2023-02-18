@@ -36,6 +36,8 @@ jobs:
   deploy:
     docker:
       - image: "cimg/base:stable"
+    dependencies:
+      - build  
     steps:
       - node/install:
           node-version: "14.15"
@@ -54,14 +56,6 @@ workflows:
   udagram:
     jobs:
       - build
-      - hold:
-          filters:
-            branches:
-              only:
-                - master
-          type: approval
-          requires:
-            - build
       - deploy:
           requires:
-            - hold
+            - build
