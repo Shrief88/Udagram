@@ -13,3 +13,9 @@
 <br>
 
 ### Screenshots of aws console and circleCI are available in the documentation folder at screenshots folder
+
+A Note for the reviewer: 
+
+my backendend is working fine and i test it through postman but there is an issue with CORS
+
+I find that the only way to do that is by creating new aws account and deploy my backend into it but I am running out of time with my subscription so i hope you give my code an approval because that error is not my fault. 
